@@ -1,0 +1,28 @@
+model_routing:
+  # Schnelle Entscheidungen (< 100ms)
+  immediate_tactical:
+    model: "tinyllama:1.1b"  # Kleinste, schnellste
+    quantization: "Q4_K_M"
+    max_tokens: 50
+    temperature: 0.1  # Deterministisch
+
+  # Standard Taktik (< 500ms)
+  tactical_planning:
+    model: "phi-2:2.7b"
+    quantization: "Q4_K_M"
+    max_tokens: 200
+    temperature: 0.3
+
+  # Operative Planung (< 2s)
+  operational:
+    model: "mistral:7b"
+    quantization: "Q4_K_M"
+    max_tokens: 500
+    temperature: 0.5
+
+  # Strategische Analyse (< 10s)
+  strategic:
+    model: "mixtral:8x7b"  # Nur wenn nötig
+    quantization: "Q4_K_M"
+    max_tokens: 1000
+    temperature: 0.7
