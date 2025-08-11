@@ -1,114 +1,231 @@
-# Wargame_AI_Agents
-A new approach to the old Prussian war game. SLM, Langgraph and MCP Server are to represent the PoC.
-prussian-wargame/
-├── docker-compose.yml              # Container-Orchestrierung
-├── requirements.txt                # Python Dependencies
-├── .env                           # Umgebungsvariablen
-│
-├── core/                          # Kern-Framework
-│   ├── __init__.py
-│   ├── domain/                   # Domain Models
-│   │   ├── units.py             # Einheitendefinitionen
-│   │   ├── terrain.py           # Geländemodelle
-│   │   ├── orders.py            # Befehlsstrukturen
-│   │   └── combat.py            # Kampfmechaniken
-│   │
-│   ├── simulation/               # Simulationskern
-│   │   ├── engine.py            # Hauptsimulation
-│   │   ├── physics.py           # Ballistik & Bewegung
-│   │   ├── visibility.py        # Line-of-Sight
-│   │   └── weather.py           # Wettereffekte
-│   │
-│   └── analytics/                # Analyse & Metriken
-│       ├── lanchester.py        # Kampfmodelle
-│       ├── logistics.py         # Versorgungsmodelle
-│       └── morale.py            # Moralberechnungen
-│
-├── agents/                        # KI-Agenten (LangGraph)
-│   ├── __init__.py
-│   ├── doctrines/                # Militärdoktrinen
-│   │   ├── us_airmobile.py      # US Air Cavalry Doktrin
-│   │   ├── nva_peoples_war.py   # NVA Volkskrieg
-│   │   ├── arvn_defensive.py    # ARVN Defensive
-│   │   └── vc_guerrilla.py      # VC Guerilla Taktiken
-│   │
-│   ├── commanders/               # Kommandoebenen
-│   │   ├── strategic.py         # Division/Corps
-│   │   ├── operational.py       # Brigade/Regiment
-│   │   └── tactical.py          # Battalion/Company
-│   │
-│   ├── specialists/              # Spezialisierte Agenten
-│   │   ├── platoon_leader.py    # Zugführer (Schnelle Taktik)
-│   │   ├── fire_support.py      # Artillerie-Koordinator
-│   │   ├── intel_analyst.py     # S2 Intelligence
-│   │   └── logistics_officer.py # S4 Versorgung
-│   │
-│   └── graphs/                   # LangGraph Definitionen
-│       ├── command_graph.py     # Befehlskette
-│       ├── ooda_loop.py         # OODA Decision Cycle
-│       └── combat_flow.py       # Gefechtsablauf
-│
-├── mcp_servers/                   # MCP Server Integration
-│   ├── __init__.py
-│   ├── historical_data/          # Historische Daten Server
-│   │   ├── vietnam_battles.py   # Schlacht-Datenbank
-│   │   ├── unit_histories.py    # Einheiten-Historie
-│   │   └── terrain_maps.py      # Geländekarten
-│   │
-│   ├── doctrine_server/          # Doktrin-Server
-│   │   ├── server.py            # MCP Server Implementation
-│   │   ├── decision_trees/      # Vorgefertigte Entscheidungen
-│   │   │   ├── contact_drill.json
-│   │   │   ├── ambush_response.json
-│   │   │   └── medevac_procedure.json
-│   │   └── knowledge_base.db    # Taktik-Datenbank
-│   │
-│   └── realtime_server/          # Echtzeit-Daten
-│       ├── weather_service.py   # Wetter-Updates
-│       └── intel_feed.py        # Intelligence Updates
-│
-├── models/                        # LLM Modelle
-│   ├── configs/
-│   │   ├── ollama_config.yml    # Ollama Einstellungen
-│   │   ├── model_routing.yml    # Model-Routing Rules
-│   │   └── quantization.yml     # Quantisierungs-Settings
-│   │
-│   └── prompts/                  # System Prompts
-│       ├── platoon_leader.md    # Zugführer Prompt
-│       ├── battalion_co.md      # Bataillonskommandeur
-│       └── intel_analyst.md     # Nachrichtenoffizier
-│
-├── scenarios/                     # Szenario-Definitionen
-│   ├── da_nang_1966/
-│   │   ├── scenario.json        # Szenario-Parameter
-│   │   ├── orbat_us.json        # US Order of Battle
-│   │   ├── orbat_nva_vc.json    # NVA/VC Forces
-│   │   ├── terrain.geojson      # Geländedaten
-│   │   └── objectives.json      # Missionsziele
-│   │
-│   └── templates/                # Szenario-Templates
-│       ├── meeting_engagement.json
-│       ├── defense.json
-│       └── ambush.json
-│
-├── ui/                           # User Interface
-│   ├── streamlit_app.py         # Haupt-UI (Streamlit)
-│   ├── components/
-│   │   ├── map_view.py          # Kartenansicht
-│   │   ├── unit_panel.py        # Einheitenübersicht
-│   │   ├── order_interface.py   # Befehlseingabe
-│   │   └── battle_log.py        # Gefechtsprotokoll
-│   │
-│   └── static/
-│       ├── css/
-│       └── js/
-│
-├── tests/                        # Tests
-│   ├── unit/
-│   ├── integration/
-│   └── performance/
-│
-└── notebooks/                    # Jupyter Notebooks
-    ├── doctrine_development.ipynb
-    ├── combat_analysis.ipynb
-    └── agent_training.ipynb
+# Wargame AI Agents 🎯
+
+*Ein moderner Ansatz auf das alte preußische Kriegsspiel - mit Small Language Models, LangGraph und MCP Servern*
+
+## 🎖️ Das Preußische Erbe
+
+Das preußische Kriegsspiel (*Kriegsspiel*), entwickelt 1824 von Georg Leopold von Reiswitz, revolutionierte die militärische Ausbildung durch strukturierte Simulation. Diese Tradition führen wir fort - mit KI-Agenten als Kommandeure, die verschiedene Militärdoktrinen verkörpern und realistische taktische Entscheidungen treffen.
+
+> *"Der Krieg ist das Gebiet der Ungewißheit; drei Viertel derjenigen Faktoren, auf welche das Handeln im Kriege gebaut wird, liegen mehr oder weniger im Nebel einer größeren oder geringeren Ungewißheit."* - Carl von Clausewitz
+
+## 🚀 Vision
+
+Dieses Projekt implementiert ein **Proof of Concept** für KI-gesteuerte Kriegssimulation, wobei:
+- **Small Language Models** als taktische Kommandeure agieren
+- **LangGraph** komplexe Entscheidungsketten orchestriert  
+- **MCP Server** historische Daten und Doktrinen bereitstellen
+- **Realistische Militärdoktrinen** (Vietnam-Ära) das Verhalten prägen
+
+## 🏗️ Architektur
+
+```
+📁 prussian-wargame/
+├── 🎯 core/                    # Simulationskern
+│   ├── domain/                 # Militärische Entitäten
+│   ├── simulation/             # Physics Engine
+│   └── analytics/              # Kampfmodelle (Lanchester etc.)
+├── 🤖 agents/                  # KI-Kommandeure
+│   ├── doctrines/             # US/NVA/ARVN/VC Doktrinen  
+│   ├── commanders/            # Kommandoebenen
+│   └── graphs/                # LangGraph Entscheidungsbäume
+├── 🌐 mcp_servers/            # Datenserver
+│   ├── historical_data/       # Schlacht-Datenbank
+│   ├── doctrine_server/       # Taktik-Wissensbasis
+│   └── realtime_server/       # Live-Updates
+├── 🧠 models/                 # LLM Konfiguration
+├── 🎮 scenarios/              # Historische Szenarien
+└── 📊 ui/                     # Streamlit Interface
+```
+
+## 🎭 KI-Agenten Portfolio
+
+### 🇺🇸 **US Forces**
+- **Air Mobile Doctrine**: Hubschrauber-gestützte Manöver
+- **Fire Support Coordination**: Präzise Artillerie-/Luftunterstützung
+- **Advanced Logistics**: Überlegene Versorgungsketten
+
+### 🇻🇳 **NVA (North Vietnamese Army)**
+- **People's War Strategy**: Langzeit-Zermürbungstaktik
+- **Tunnel Systems**: Unterirdische Operationsbasen
+- **Mass Infantry Assaults**: Koordinierte Großangriffe
+
+### 🇻🇳 **ARVN (Army of Vietnam)**
+- **Defensive Operations**: Befestigte Stellungen halten
+- **Local Knowledge**: Terrain-/Bevölkerungsverständnis
+- **US Equipment Integration**: Amerikanische Waffentechnik
+
+### 🌿 **Viet Cong**
+- **Guerrilla Warfare**: Hinterhalt und Sabotage
+- **Civilian Blend**: Tarnung in der Zivilbevölkerung
+- **Booby Traps**: Improvisierte Sprengfallen
+
+## 🧮 Simulationsmodelle
+
+### **Lanchester'sche Gesetze**
+Mathematische Modellierung von Kampfkraft und Verlustprognosen
+
+### **OODA-Loop Integration**
+- **Observe**: Aufklärungs- und Sensordaten
+- **Orient**: Situationsbewertung mit historischem Kontext
+- **Decide**: Doktrin-basierte Entscheidungsfindung  
+- **Act**: Befehlsausführung und Feedback-Loop
+
+### **Clausewitz'sche Prinzipien**
+- **Nebel des Krieges**: Unvollständige Information
+- **Friktion**: Unvorhersehbare Störfaktoren
+- **Schwerpunkt**: Konzentration der Kräfte
+
+## 🎯 Kernfeatures
+
+### **Realistische Kommandostrukturen**
+```python
+# Hierarchische Befehlskette
+Strategic Command (Division/Corps)
+    ↓
+Operational Command (Brigade/Regiment)  
+    ↓
+Tactical Command (Battalion/Company)
+    ↓
+Squad Leaders (Platoon/Squad)
+```
+
+### **Dynamische Gefechtssimulation**
+- **Ballistik & Physik**: Realistische Projektilbahnen
+- **Line-of-Sight**: Geländebasierte Sichtlinien
+- **Wettereffekte**: Einfluss auf Sicht und Bewegung
+- **Moral & Müdigkeit**: Psychologische Faktoren
+
+### **Spezialisierte KI-Rollen**
+- **🎖️ Platoon Leader**: Schnelle taktische Entscheidungen
+- **💥 Fire Support Officer**: Artillerie-Koordination
+- **🔍 Intel Analyst**: Feindlagebeurteilung
+- **📦 Logistics Officer**: Versorgungsplanung
+
+## 🎮 Vietnam-Szenarien
+
+### **Da Nang 1966**
+- **US Marines** vs **NVA/VC** um strategischen Flughafen
+- Dschungelkampf mit Helikopter-Unterstützung
+- Komplexe Zivilisten-/Kombattanten-Unterscheidung
+
+### **Weitere Szenarien**
+- **Meeting Engagement**: Zufällige Feindberührung
+- **Defensive Operations**: Stützpunkt-Verteidigung  
+- **Ambush Scenarios**: Hinterhalt-Situationen
+
+## 🛠️ Technologie-Stack
+
+```yaml
+Core Engine:
+  - Python 3.11+
+  - LangGraph (Agentenorchestierung)
+  - MCP Protocol (Datenserver)
+  
+AI Models:
+  - Ollama (Lokale LLM Hosting)
+  - Quantisierte Modelle (Effizienz)
+  - Custom Military Prompts
+
+Simulation:
+  - NumPy (Numerische Berechnungen)
+  - GeoPandas (Geländeanalyse)
+  - NetworkX (Kommunikationslinien)
+
+Interface:
+  - Streamlit (Web UI)
+  - Plotly (Interaktive Karten)
+  - WebGL (3D Visualisierung)
+
+Infrastructure:
+  - Docker Compose
+  - Redis (Caching)
+  - SQLite (Historische Daten)
+```
+
+## 🚀 Quick Start
+
+```bash
+# Repository klonen
+git clone https://github.com/your-org/wargame-ai-agents.git
+cd wargame-ai-agents
+
+# Environment Setup
+cp .env.template .env
+pip install -r requirements.txt
+
+# Ollama Models herunterladen
+ollama pull llama3.2:3b
+ollama pull mistral:7b
+
+# Services starten
+docker-compose up -d
+
+# Simulation starten
+streamlit run ui/streamlit_app.py
+```
+
+## 📊 Metriken & Analytics
+
+### **Gefechtsanalyse**
+- **Casualty Ratios**: Verlustvergleiche
+- **Terrain Control**: Geländebeherrschung über Zeit
+- **Supply Efficiency**: Logistik-Performance
+- **Command Latency**: Entscheidungsgeschwindigkeit
+
+### **KI-Agent Performance**
+- **Decision Quality**: Taktische Angemessenheit
+- **Doctrine Adherence**: Treue zur Militärdoktrin  
+- **Adaptability**: Reaktion auf unerwartete Situationen
+- **Resource Utilization**: Effizienter Ressourceneinsatz
+
+## 🎯 Roadmap
+
+### **Phase 1: Foundation** ✅
+- [x] Basis-Simulationsengine
+- [x] Einfache KI-Agenten
+- [x] Streamlit Prototyp
+
+### **Phase 2: Intelligence** 🔄
+- [ ] LangGraph Integration
+- [ ] MCP Server Implementation
+- [ ] Doktrin-spezifische Agenten
+- [ ] Vietnam Szenario
+
+### **Phase 3: Sophistication** 📋
+- [ ] Multi-Agent Negotiation
+- [ ] Real-time Weather/Intel Feeds
+- [ ] Advanced Physics (Ballistics)
+- [ ] Machine Learning Integration
+
+### **Phase 4: Scale** 🚀
+- [ ] Multi-Theater Operations
+- [ ] Historical Battle Recreation
+- [ ] Educational Interface
+- [ ] Competition Mode
+
+## 🤝 Contribution
+
+Wir suchen Verstärkung in:
+- **🎖️ Militärhistorikern**: Doktrin-Authentizität
+- **🤖 AI Engineers**: LLM Optimierung  
+- **⚙️ Simulation Devs**: Physics/Mathematics
+- **🎮 Game Designers**: User Experience
+
+## 📚 Literatur & Inspiration
+
+- **"Vom Kriege"** - Carl von Clausewitz
+- **"The Art of War"** - Sun Tzu  
+- **"On War"** - B.H. Liddell Hart
+- **"We Were Soldiers Once... and Young"** - Harold G. Moore
+- **"The Face of Battle"** - John Keegan
+
+## 📄 Lizenz
+
+MIT License - Siehe [LICENSE](LICENSE) für Details.
+
+---
+
+*"In der Beschränkung zeigt sich erst der Meister, und das Gesetz nur kann uns Freiheit geben."*  
+**- Goethe** (über die Kunst der Simulation)
+
+🎯 **[Live Demo]** | 📖 **[Dokumentation]** | 💬 **[Discord Community]** | 🐛 **[Issues]**
